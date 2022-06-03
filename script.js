@@ -146,6 +146,7 @@ class UniversalArray{
 	}
 	// СОРТИРОВКИ
 	bubblesSort() { // <--- пузырьком
+		if (this.#nElements <= 1) return
 		for (let reverse = this.#nElements - 1; reverse >= 1; reverse--) {
 			for (let straight = 0; straight < reverse; straight++) {
 				if (this.#array[straight] > this.#array[straight + 1]) {
@@ -157,6 +158,7 @@ class UniversalArray{
 		}
 	}
 	selectSort() { // <--- сортировка методом выбора
+		if (this.#nElements <= 1) return
 		for (let out = 0; out < this.#nElements - 1; out++) {
 			let min = out
 			for (let inner = out + 1; inner < this.#nElements; inner++) {
@@ -171,6 +173,7 @@ class UniversalArray{
 		}
 	}
 	insertSort() { // <--- сортировка методом вставки
+		if (this.#nElements <= 1) return
 		for (let out = 1; out < this.#nElements; out++) {
 			let save = this.#array[out]
 			let inner = out
@@ -187,6 +190,7 @@ class UniversalArray{
 		this.#array[index2] = save
 	}
 	doubleSidedBubble() { // <--- улучшенный (двусторонний пузырек)
+		if (this.#nElements <= 1) return
 		let leftToRight = 0
 		let rightToLeft = this.#nElements - 1
 		let inner
@@ -201,6 +205,7 @@ class UniversalArray{
 		}
 	}
 	oddEvenSort() { // <--- сортировка методом четных - нечетных перестановок
+		if (this.#nElements <= 1) return
 		for (let out = 0; out < this.#nElements; out++) {
 			let flag = true
 			for (let inner = (out % 2 === 0 ? 0 : 1); inner < this.#nElements - 1; inner += 2) {
@@ -214,20 +219,42 @@ class UniversalArray{
 			if (flag) break
 		}
 	}
+	insertSortAndNoDups() { // <--- сортировка методом вставки и удаление дубликатов
+		if (this.#nElements <= 1) return
+		let scoreDelete = 0
+		for (let out = 1; out < this.#nElements; out++) {
+			let save = this.#array[out] // пограничник
+			let inner = out
+			while(inner > 0 && this.#array[inner - 1] >= save) {
+				if (this.#array[inner - 1] === save) save = -1
+				this.#array[inner] = this.#array[inner - 1]
+				--inner
+			}
+			if (save === -1) scoreDelete++
+			this.#array[inner] = save
+		}
+		let correctIndex = 0
+		for (let m = scoreDelete; m < this.#nElements; m++) {
+			this.#array[correctIndex] = this.#array[m]
+			++correctIndex
+		}
+		this.#nElements -= scoreDelete
+	}
 }
 
 class UniversalArrayApp{
 	static main() {
 		const MAX_SIZE = 100
 		const arrayInstance = new UniversalArray(MAX_SIZE)
-		const arrayElements = [100, 66, 77, 33, 55, 11, 44, 22, 99, 88]
+		const arrayElements = [100, 22, 66, 77, 33]
 		for (let m = 0; m < arrayElements.length; m++) {
 			arrayInstance.insertDefault(arrayElements[m])
 		}
 		arrayInstance.display()
 		console.log("before sort method")
-		arrayInstance.oddEvenSort()
+		arrayInstance.insertSortAndNoDups()
 		arrayInstance.display()
+		console.log(arrayInstance.getSize())
 	}
 }
 
