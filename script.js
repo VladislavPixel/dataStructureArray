@@ -207,16 +207,13 @@ class UniversalArray{
 	oddEvenSort() { // <--- сортировка методом четных - нечетных перестановок
 		if (this.#nElements <= 1) return
 		for (let out = 0; out < this.#nElements; out++) {
-			let flag = true
 			for (let inner = (out % 2 === 0 ? 0 : 1); inner < this.#nElements - 1; inner += 2) {
 				if (this.#array[inner] > this.#array[inner + 1]) {
 					const save = this.#array[inner]
 					this.#array[inner] = this.#array[inner + 1]
 					this.#array[inner + 1] = save
-					flag = false
 				}
 			}
-			if (flag) break
 		}
 	}
 	insertSortAndNoDups() { // <--- сортировка методом вставки и удаление дубликатов
